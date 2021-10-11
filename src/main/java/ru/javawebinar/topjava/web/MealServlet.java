@@ -49,16 +49,11 @@ public class MealServlet extends HttpServlet {
                     req.setAttribute("meal", repositoryMemory.getById(id));
                     req.setAttribute("title", "Edit meal");
                     req.getRequestDispatcher("/editMeals.jsp").forward(req, resp);
-                    break;
                 case "add":
                     req.setAttribute("title", "Add meal");
                     req.getRequestDispatcher("/editMeals.jsp").forward(req, resp);
-                    break;
                 case "delete":
                     repositoryMemory.delete(id);
-                    req.removeAttribute("action");
-                    req.removeAttribute("id");
-                    break;
             }
         }
         showMealTable(req, resp);
