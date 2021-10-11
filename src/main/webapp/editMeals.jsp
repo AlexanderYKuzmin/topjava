@@ -5,22 +5,22 @@
   Time: 13:02
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>${title}</title>
 </head>
 <body>
-    <h2>Edit meal</h2>
+    <h2>${title}</h2>
     <form action="meals" method="post">
         <c:set var="meal" value="${meal}"/>
+        <input type="hidden" name="id" value="${meal.id}">
         <table>
            <tbody>
                 <tr style="background: #cccccc">
                     <td>Date Time:</td>
                     <td><input type="datetime-local" name="date" value="${meal.dateTime}">
-                        <input type="hidden" name="id" value="${meal.id}">
                     </td>
                 </tr>
                 <tr style="background: #cccccc">
@@ -34,12 +34,8 @@
            </tbody>
         </table>
         <button type="submit">Save</button>
-        <button type="reset">Cancel</button>
+        <button type="reset" name="cancel-btn" value="cancel" onclick="window.history.back()">Cancel</button>
     </form>
-
-
-
-
 
 </body>
 </html>
