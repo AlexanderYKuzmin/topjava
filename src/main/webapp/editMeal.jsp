@@ -1,20 +1,12 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Alexander
-  Date: 09.10.2021
-  Time: 13:02
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>${title}</title>
+    <title>${meal.id > 0 ? 'Edit meal' : 'Add meal'}</title>
 </head>
 <body>
-    <h2>${title}</h2>
-    <form action="meals" method="post">
-        <c:set var="meal" value="${meal}"/>
+    <h2>${meal.id > 0 ? 'Edit meal' : 'Add meal'}</h2>
+    <form id="edit-meal" action="meals" method="post">
         <input type="hidden" name="id" value="${meal.id}">
         <table>
            <tbody>
@@ -33,9 +25,9 @@
                 </tr>
            </tbody>
         </table>
-        <button type="submit">Save</button>
-        <button type="reset" name="cancel-btn" value="cancel" onclick="window.history.back()">Cancel</button>
     </form>
+    <button type="submit" form="edit-meal">Save</button>
+    <input type="button" name="cancel-btn" value="cancel" onclick="window.history.back()"/>
 
 </body>
 </html>
