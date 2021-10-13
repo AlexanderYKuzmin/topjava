@@ -10,12 +10,8 @@
     <h3><a href="index.html">Home</a></h3>
     <hr>
     <h2>Meals</h2>
-    <form method="post" action='<c:url value="/meals?action=add"/>'>
-        <input type="submit" value="Add meal"
-               style="border: none; background: none; font-size: 18px;
-               font-weight: bold; text-decoration: underline; color: mediumblue"/>
-    </form>
-    <br>
+    <p><a href="${pageContext.request.contextPath}/meals?action=add">Add Meal</a></p>
+
     <table border="1">
         <thead>
             <tr>
@@ -34,12 +30,13 @@
                     <td width="240">${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td>
-                        <form method="post" action='<c:url value="/meals?action=update"/>' style="display:inline;">
+                        <form action='<c:url value="/meals"/>' style="display:inline">
                             <input type="hidden" name="id" value="${meal.id}">
+                            <input type="hidden" name="action" value="update">
                             <input type="submit" value="Update">
                         </form>
                     <td>
-                        <form method="post" action='<c:url value="/meals?action=delete"/>' style="display:inline;">
+                        <form method="post" action='<c:url value="/meals?action=delete"/>' style="display:inline">
                             <input type="hidden" name="id" value="${meal.id}">
                             <input type="submit" value="Delete">
                         </form>
@@ -47,7 +44,6 @@
                 </tr>
             </c:forEach>
         </tbody>
-
     </table>
 </body>
 </html>

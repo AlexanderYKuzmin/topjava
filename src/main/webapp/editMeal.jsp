@@ -2,12 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>${meal.id > 0 ? 'Edit meal' : 'Add meal'}</title>
+    <c:set var="title" value="${meal.id != null ? 'Edit meal' : 'Add meal'}"/>
+    <title>${title}</title>
 </head>
 <body>
-    <h2>${meal.id > 0 ? 'Edit meal' : 'Add meal'}</h2>
+    <h2>${title}</h2>
     <form id="edit-meal" action="meals" method="post">
-        <input type="hidden" name="id" value="${meal.id}">
+        <input type="hidden" name="id" value="${title.equals('Add meal') ? null : meal.id}">
         <table>
            <tbody>
                 <tr style="background: #cccccc">

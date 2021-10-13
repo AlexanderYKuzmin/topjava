@@ -14,7 +14,7 @@ public class MemoryMealRepository implements MealRepository {
     private final Map<Integer, Meal> meals = new ConcurrentHashMap<>();
 
     public MemoryMealRepository() {
-        for (Meal meal: MealsUtil.meals) {
+        for (Meal meal : MealsUtil.meals) {
             add(meal);
         }
     }
@@ -38,16 +38,12 @@ public class MemoryMealRepository implements MealRepository {
 
     @Override
     public Meal update(Meal meal) {
-        if(meals.containsKey(meal.getId())){
-            meals.put(meal.getId(), meal);
+        meals.replace(meal.getId(), meal);
             return meal;
-        }
-       return null;
     }
 
     @Override
     public void delete(int id) {
         meals.remove(id);
     }
-
 }

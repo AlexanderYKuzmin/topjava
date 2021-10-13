@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.repository;
 import ru.javawebinar.topjava.model.Meal;
 
 import java.util.List;
-import java.util.Map;
 
 public interface MealRepository {
     List<Meal> getAll();
@@ -15,5 +14,4 @@ public interface MealRepository {
     Meal update(Meal meal);
 
     void delete(int id);
-
 }
