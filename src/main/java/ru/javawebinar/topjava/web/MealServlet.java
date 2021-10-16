@@ -2,23 +2,12 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Controller;
-import ru.javawebinar.topjava.SpringMain;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
-import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
-import ru.javawebinar.topjava.web.user.AdminRestController;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,9 +38,10 @@ public class MealServlet extends HttpServlet {
         switch (request.getParameter("action")) {
             case "postMealData":
                 Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                    LocalDateTime.parse(request.getParameter("dateTime")),
-                    request.getParameter("description"),
-                    Integer.parseInt(request.getParameter("calories")));
+                        LocalDateTime.parse(request.getParameter("dateTime")),
+                        request.getParameter("description"),
+                        Integer.parseInt(request.getParameter("calories")),
+                        SecurityUtil.authUserId());
 
                 log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
                 mealController.save(meal);
@@ -60,10 +49,10 @@ public class MealServlet extends HttpServlet {
                 break;
             case "postFilterData":
                 List<MealTo> mealsTo = mealController.getAllByDateAndTime(
-                    LocalDate.parse(request.getParameter("startDate")),
-                    LocalDate.parse(request.getParameter("startDate")),
-                    LocalTime.parse(request.getParameter("startTime")),
-                    LocalTime.parse(request.getParameter("endTime"))
+                        LocalDate.parse(request.getParameter("dateStart")),
+                        LocalDate.parse(request.getParameter("dateEnd")),
+                        LocalTime.parse(request.getParameter("timeStart")),
+                        LocalTime.parse(request.getParameter("timeEnd"))
                 );
                 request.setAttribute("meals", mealsTo);
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
@@ -84,9 +73,9 @@ public class MealServlet extends HttpServlet {
                 break;
             case "create":
             case "update":
-                final Meal meal = "create".equals(action) ?
-                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        mealController.get(getId(request));
+                final Meal meal = "create".equals(action)
+                        ? new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, SecurityUtil.authUserId())
+                        : mealController.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;

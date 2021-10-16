@@ -23,7 +23,9 @@
     <h2>Meals</h2>
     <div style="display: inline">
         <a href="meals?action=create">Add Meal</a>
-        <a href="meals?action=filter">Filter Meal</a>
+        <a href="meals?action=filter" style="margin-left: 20px">Filter Meal</a>
+
+
     </div>
 
     <br><br>
