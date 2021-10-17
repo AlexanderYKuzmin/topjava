@@ -48,6 +48,7 @@ public class MealServlet extends HttpServlet {
                 response.sendRedirect("meals");
                 break;
             case "postFilterData":
+                log.info("Filtering meal data");
                 List<MealTo> mealsTo = mealController.getAllByDateAndTime(
                         LocalDate.parse(request.getParameter("dateStart")),
                         LocalDate.parse(request.getParameter("dateEnd")),
@@ -80,10 +81,11 @@ public class MealServlet extends HttpServlet {
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
             case "filter":
+                log.info("Filter. Form preparation");
                 request.setAttribute("startDate", LocalDate.now());
                 request.setAttribute("endDate", LocalDate.now());
-                request.setAttribute("startTime", LocalTime.now());
-                request.setAttribute("endTime", LocalTime.now());
+                request.setAttribute("startTime", LocalTime.of(0, 0));
+                request.setAttribute("endTime", LocalTime.of(23, 59));
                 request.getRequestDispatcher("/mealFilterForm.jsp").forward(request, response);
                 break;
             case "all":

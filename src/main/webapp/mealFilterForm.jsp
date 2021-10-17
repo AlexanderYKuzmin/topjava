@@ -44,7 +44,7 @@
         <dl>
             <dt>Start time:</dt>
             <dd><input type="time" value="${startTime}"  name="timeStart" required></dd>
-            <dt style="margin-left: 45px">End time:</dt>
+            <dt style="margin-left: 46px">End time:</dt>
             <dd><input type="time" value="${endTime}" name="timeEnd" required></dd>
         </dl>
         <button type="submit">Save</button>

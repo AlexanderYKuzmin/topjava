@@ -24,10 +24,7 @@
     <div style="display: inline">
         <a href="meals?action=create">Add Meal</a>
         <a href="meals?action=filter" style="margin-left: 20px">Filter Meal</a>
-
-
     </div>
-
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
