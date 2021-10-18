@@ -7,6 +7,23 @@
 <head>
     <title>Meal list</title>
     <style>
+        dl {
+            background: none repeat scroll 0 0 #FAFAFA;
+            margin: 8px 0;
+            padding: 0;
+        }
+
+        dt {
+            display: inline-block;
+            width: 100px;
+        }
+
+        dd {
+            display: inline-block;
+            margin-left: 8px;
+            vertical-align: top;
+        }
+
         .normal {
             color: green;
         }
@@ -21,9 +38,25 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="filter">
+        <dl>
+            <dt>Start date:</dt>
+            <dd><input type="date" value="${filterDateStart}" name="dateStart" required></dd>
+            <dt style="margin-left: 30px">End date:</dt>
+            <dd><input type="date" value="${filterDateEnd}" name="dateEnd" required></dd>
+        </dl>
+        <dl>
+            <dt>Start time:</dt>
+            <dd><input type="time" value="${filterTimeStart}"  name="timeStart" required></dd>
+            <dt style="margin-left: 46px">End time:</dt>
+            <dd><input type="time" value="${filterTimeEnd}" name="timeEnd" required></dd>
+        </dl>
+        <button type="submit">Filter</button>
+        <button type="reset">Reset</button>
+    </form>
     <div style="display: inline">
         <a href="meals?action=create">Add Meal</a>
-        <a href="meals?action=filter" style="margin-left: 20px">Filter Meal</a>
     </div>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">

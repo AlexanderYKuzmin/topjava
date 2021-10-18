@@ -18,16 +18,16 @@ public class MealsUtil {
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
 
     public static final List<Meal> meals = Arrays.asList(
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500, 1),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000, 2),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500, 1),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100, 1),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000, 2),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500, 1),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410, 2),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 28, 10, 0), "Завтрак", 2100, 1),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 28, 13, 0), "Обед", 1500, 1),
-            new Meal(LocalDateTime.of(2020, Month.JANUARY, 28, 20, 0), "Ужин", 799, 2)
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак пользователя", 500, 1),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед администратора", 1000, 2),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин пользователя", 500, 1),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда пользователя", 100, 1),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак администратора", 1000, 2),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед пользователя", 500, 1),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин администратора", 410, 2),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 28, 10, 0), "Завтрак пользователя", 2100, 1),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 28, 13, 0), "Обед пользователя", 1500, 1),
+            new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 28, 20, 0), "Ужин администратора", 799, 2)
     );
 
     public static List<MealTo> getTos(Collection<Meal> meals, int caloriesPerDay) {

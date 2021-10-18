@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.FilterDateAndTimeValuesStorage;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
@@ -38,8 +39,13 @@ public class MealRestController {
     public Meal create(Meal meal) {
         log.info("create {}", meal);
         checkNew(meal);
-        meal.setUserId(SecurityUtil.authUserId());
-        return service.create(meal);
+        return service.create(meal, SecurityUtil.authUserId());
+    }
+
+    public void update(Meal meal) {
+        log.info("update {} with id={}", meal, meal.getId());
+        assureIdConsistent(meal, meal.getId());
+        service.update(meal, SecurityUtil.authUserId());
     }
 
     public void delete(int id) {
@@ -49,19 +55,21 @@ public class MealRestController {
 
     public void save(Meal meal) {
         log.info("update {} with id={}", meal, meal.getId());
-        meal.setUserId(SecurityUtil.authUserId());
         if (meal.isNew()) {
             create(meal);
         } else {
-            service.update(meal);
+            update(meal);
         }
     }
 
-    public List<MealTo> getAllByDateAndTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+    public List<MealTo> getAllByDateAndTime() {
         log.info("getAll by Data and Time");
-        Predicate<Meal> filter = meal ->
-                DateTimeUtil.isBetweenDates(meal.getDate(), startDate, endDate) &&
-                DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime);
-        return MealsUtil.filterByPredicate(service.getAll(SecurityUtil.authUserId()),MealsUtil.DEFAULT_CALORIES_PER_DAY, filter);
+        Predicate<Meal> dateAndTimePredicate = meal -> meal.getUserId() == SecurityUtil.authUserId() &&
+                DateTimeUtil.isBetweenDates(meal.getDate(), FilterDateAndTimeValuesStorage.getDateStart(),
+                        FilterDateAndTimeValuesStorage.getDateEnd()) &&
+                DateTimeUtil.isBetweenHalfOpen(meal.getTime(), FilterDateAndTimeValuesStorage.getTimeStart(),
+                        FilterDateAndTimeValuesStorage.getTimeEnd());
+
+        return MealsUtil.getTos(service.getAllByDateAndTime(dateAndTimePredicate), SecurityUtil.authUserCaloriesPerDay());
     }
 }

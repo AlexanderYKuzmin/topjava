@@ -8,9 +8,11 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
@@ -20,24 +22,23 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(this::save);
+        MealsUtil.meals.forEach(meal -> save(meal, meal.getUserId()));
     }
 
     @Override
-    public Meal save(Meal meal) {
-        log.info("save {}, repository current Id {}", meal, counter.get());
+    public Meal save(Meal meal, int userId) {
+        log.info("save {}", meal);
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
+            meal.setUserId(userId);
             repository.put(meal.getId(), meal);
             return meal;
         }
-        Meal updatedMeal = repository.computeIfPresent(meal.getId(), (id, oldMeal) -> {
-            if (oldMeal.getUserId().equals(meal.getUserId())) {
-                return meal;
-            }
-            return oldMeal;
-        });
-        return updatedMeal.equals(meal) ? updatedMeal : null;
+        return repository.computeIfPresent(meal.getId(),
+                (id, oldMeal) -> oldMeal.getUserId() == userId
+                        ? new Meal(meal.getId(), meal.getDateTime(),
+                                    meal.getDescription(), meal.getCalories(), userId)
+                        : oldMeal);
     }
 
     @Override
@@ -57,12 +58,16 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
-        Collection<Meal> meals = repository.values().stream()
+    public List<Meal> getAll(int userId) {
+        return repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId)
                 .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                 .collect(Collectors.toList());
-        return meals.isEmpty() ? null : meals;
+    }
+
+    @Override
+    public List<Meal> getAllByDateAndTime(Predicate<Meal> dateAndTimePredicate) {
+        return repository.values().stream().filter(dateAndTimePredicate).collect(Collectors.toList());
     }
 }
 
