@@ -7,27 +7,21 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.FilterDateAndTimeValuesStorage;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.*;
 
 @Controller
 public class MealRestController {
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private MealService service;
-
-    @Autowired
-    private FilterDateAndTimeValuesStorage dateAndTimeValuesStorage;
 
     public List<MealTo> getAll() {
         log.info("getAll");
@@ -35,7 +29,7 @@ public class MealRestController {
     }
 
     public Meal get(int id) {
-        log.info("get {}", id);
+        log.info("get mealId={} userId={}", id, SecurityUtil.authUserId());
         return service.get(id, SecurityUtil.authUserId());
     }
 
@@ -56,32 +50,9 @@ public class MealRestController {
         service.delete(id, SecurityUtil.authUserId());
     }
 
-    public void save(Meal meal) {
-        log.info("update {} with id={}", meal, meal.getId());
-        if (meal.isNew()) {
-            create(meal);
-        } else {
-            update(meal);
-        }
-    }
-
     public List<MealTo> getAllByDateAndTime(LocalDate dateStart, LocalDate dateEnd, LocalTime timeStart, LocalTime timeEnd) {
         log.info("getAll by Data and Time");
-        /*Predicate<Meal> dateAndTimePredicate = meal -> meal.getUserId() == SecurityUtil.authUserId() &&
-                DateTimeUtil.isBetweenDates(meal.getDate(), FilterDateAndTimeValuesStorage.getDateStart(),
-                        FilterDateAndTimeValuesStorage.getDateEnd()) &&
-                DateTimeUtil.isBetweenHalfOpen(meal.getTime(), FilterDateAndTimeValuesStorage.getTimeStart(),
-                        FilterDateAndTimeValuesStorage.getTimeEnd());*/
-        dateAndTimeValuesStorage.saveValues(dateStart, dateEnd, timeStart, timeEnd);
-        List<Meal> mealsByDate = service.getAllByDate(SecurityUtil.authUserId(), dateStart, dateEnd);
-        return MealsUtil.getFilteredTos(mealsByDate, SecurityUtil.authUserCaloriesPerDay(), timeStart, timeEnd );
-    }
-
-    public void clearFilterForm() {
-        dateAndTimeValuesStorage.clear();
-    }
-
-    public void setUserId(int userId) {
-        SecurityUtil.setAuthUserId(userId);
+        return MealsUtil.getFilteredTos(service.getAllByDate(SecurityUtil.authUserId(), dateStart, dateEnd),
+                SecurityUtil.authUserCaloriesPerDay(), timeStart, timeEnd );
     }
 }

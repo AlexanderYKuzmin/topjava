@@ -6,9 +6,7 @@ import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.function.Predicate;
 
-import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -40,9 +38,6 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
-   /* public List<Meal> getAllByDateAndTime(Predicate<Meal> dateAndTimePredicate){
-        return repository.getAllByDateAndTime(dateAndTimePredicate);
-    }*/
     public List<Meal> getAllByDate(int userId, LocalDate dateStart, LocalDate dateEnd) {
         return repository.getAllByDate(userId, dateStart, dateEnd);
     }

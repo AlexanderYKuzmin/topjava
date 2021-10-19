@@ -38,31 +38,23 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
-
     <form method="get" action="meals">
         <input type="hidden" name="action" value="filter">
         <dl>
             <dt>Start date:</dt>
-            <dd><input type="date" value="${filterDateStart}" name="dateStart" required></dd>
+            <dd><input type="date" value="${filterDateStart}" name="dateStart"></dd>
             <dt style="margin-left: 30px">End date:</dt>
-            <dd><input type="date" value="${filterDateEnd}" name="dateEnd" required></dd>
+            <dd><input type="date" value="${filterDateEnd}" name="dateEnd"></dd>
         </dl>
         <dl>
             <dt>Start time:</dt>
-            <dd><input type="time" value="${filterTimeStart}"  name="timeStart" required></dd>
-            <dt style="margin-left: 46px">End time:</dt>
-            <dd><input type="time" value="${filterTimeEnd}" name="timeEnd" required></dd>
+            <dd><input type="time" value="${filterTimeStart}"  name="timeStart"></dd>
+            <dt style="margin-left: 77px">End time:</dt>
+            <dd><input type="time" value="${filterTimeEnd}" name="timeEnd"></dd>
         </dl>
         <button type="submit">Filter</button>
         <button type="reset">Cancel</button>
-
     </form>
-    <form method="get" action="meals" id="clear-form">
-        <input type="hidden" name="action" value="clearForm" form="clear-form">
-        <button type="submit" form="clear-form">Clear filter form</button>
-    </form>
-
-
     <div>
         <a href="meals?action=create">Add Meal</a>
     </div>
