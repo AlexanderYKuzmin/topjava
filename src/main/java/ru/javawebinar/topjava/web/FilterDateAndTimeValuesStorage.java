@@ -4,35 +4,35 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class FilterDateAndTimeValuesStorage {
-    private static LocalDate dateStart;
-    private static LocalDate dateEnd;
-    private static LocalTime timeStart;
-    private static LocalTime timeEnd;
+    private LocalDate dateStart;
+    private LocalDate dateEnd;
+    private LocalTime timeStart;
+    private LocalTime timeEnd;
 
-    public static void saveValues(LocalDate dStart, LocalDate dEnd, LocalTime tStart, LocalTime tEnd) {
+    public void saveValues(LocalDate dStart, LocalDate dEnd, LocalTime tStart, LocalTime tEnd) {
         dateStart = dStart;
         dateEnd = dEnd;
         timeStart = tStart;
         timeEnd = tEnd;
     }
 
-    public static LocalDate getDateStart() {
+    public LocalDate getDateStart() {
         return dateStart;
     }
 
-    public static LocalDate getDateEnd() {
+    public LocalDate getDateEnd() {
         return dateEnd;
     }
 
-    public static LocalTime getTimeStart() {
+    public LocalTime getTimeStart() {
         return timeStart;
     }
 
-    public static LocalTime getTimeEnd() {
+    public LocalTime getTimeEnd() {
         return timeEnd;
     }
 
-    public static void clear(){
+    public void clear(){
         dateStart = null;
         dateEnd = null;
         timeStart = null;

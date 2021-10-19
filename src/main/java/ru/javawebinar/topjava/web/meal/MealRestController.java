@@ -26,9 +26,12 @@ public class MealRestController {
     @Autowired
     private MealService service;
 
+    @Autowired
+    private FilterDateAndTimeValuesStorage dateAndTimeValuesStorage;
+
     public List<MealTo> getAll() {
         log.info("getAll");
-        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
 
     public Meal get(int id) {
@@ -62,14 +65,23 @@ public class MealRestController {
         }
     }
 
-    public List<MealTo> getAllByDateAndTime() {
+    public List<MealTo> getAllByDateAndTime(LocalDate dateStart, LocalDate dateEnd, LocalTime timeStart, LocalTime timeEnd) {
         log.info("getAll by Data and Time");
-        Predicate<Meal> dateAndTimePredicate = meal -> meal.getUserId() == SecurityUtil.authUserId() &&
+        /*Predicate<Meal> dateAndTimePredicate = meal -> meal.getUserId() == SecurityUtil.authUserId() &&
                 DateTimeUtil.isBetweenDates(meal.getDate(), FilterDateAndTimeValuesStorage.getDateStart(),
                         FilterDateAndTimeValuesStorage.getDateEnd()) &&
                 DateTimeUtil.isBetweenHalfOpen(meal.getTime(), FilterDateAndTimeValuesStorage.getTimeStart(),
-                        FilterDateAndTimeValuesStorage.getTimeEnd());
+                        FilterDateAndTimeValuesStorage.getTimeEnd());*/
+        dateAndTimeValuesStorage.saveValues(dateStart, dateEnd, timeStart, timeEnd);
+        List<Meal> mealsByDate = service.getAllByDate(SecurityUtil.authUserId(), dateStart, dateEnd);
+        return MealsUtil.getFilteredTos(mealsByDate, SecurityUtil.authUserCaloriesPerDay(), timeStart, timeEnd );
+    }
 
-        return MealsUtil.getTos(service.getAllByDateAndTime(dateAndTimePredicate), SecurityUtil.authUserCaloriesPerDay());
+    public void clearFilterForm() {
+        dateAndTimeValuesStorage.clear();
+    }
+
+    public void setUserId(int userId) {
+        SecurityUtil.setAuthUserId(userId);
     }
 }

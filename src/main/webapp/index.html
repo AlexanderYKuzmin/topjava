@@ -9,6 +9,15 @@
 <ul style="font-size: large">
     <li><a href="users">Users</a></li>
     <li><a href="meals">Meals</a></li>
+    <li>
+        <form action="meals" method="get">
+            <select name="user" id="user-selection" onchange="this.form.submit()">
+                <!--<option value="">Choose user...</option>-->
+                <option value="1"}>User</option>
+                <option value="2"}>Admin</option>
+            </select>
+        </form>
+    </li>
 </ul>
 </body>
 </html>

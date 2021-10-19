@@ -34,6 +34,12 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
+    public void destroy() {
+        super.destroy();
+        appCtx.close();
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
@@ -50,8 +56,11 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+        int userId = Integer.parseInt(request.getParameter("user"));
+        mealController.setUserId(userId);
 
+
+        String action = request.getParameter("action");
         switch (action == null ? "all" : action) {
             case "delete":
                 int id = getId(request);
@@ -69,27 +78,31 @@ public class MealServlet extends HttpServlet {
                 break;
             case "filter":
                 log.info("Filtering meal by date and time");
-                FilterDateAndTimeValuesStorage.saveValues(
-                        LocalDate.parse(request.getParameter("dateStart")),
-                        LocalDate.parse(request.getParameter("dateEnd")),
-                        LocalTime.parse(request.getParameter("timeStart")),
-                        LocalTime.parse(request.getParameter("timeEnd"))
-                );
-                List<MealTo> mealsTo = mealController.getAllByDateAndTime();
+                LocalDate dateStart = LocalDate.parse(request.getParameter("dateStart"));
+                LocalDate dateEnd =   LocalDate.parse(request.getParameter("dateEnd"));
+                LocalTime timeStart = LocalTime.parse(request.getParameter("timeStart"));
+                LocalTime timeEnd = LocalTime.parse(request.getParameter("timeEnd")) ;
+
+                List<MealTo> mealsTo = mealController.getAllByDateAndTime(
+                    dateStart, dateEnd, timeStart, timeEnd);
+
                 request.setAttribute("meals", mealsTo);
-                request.setAttribute("filterDateStart", FilterDateAndTimeValuesStorage.getDateStart());
-                request.setAttribute("filterDateEnd", FilterDateAndTimeValuesStorage.getDateEnd());
-                request.setAttribute("filterTimeStart", FilterDateAndTimeValuesStorage.getTimeStart());
-                request.setAttribute("filterTimeEnd", FilterDateAndTimeValuesStorage.getTimeEnd());
+                request.setAttribute("filterDateStart", dateStart);
+                request.setAttribute("filterDateEnd", dateEnd);
+                request.setAttribute("filterTimeStart", timeStart);
+                request.setAttribute("filterTimeEnd", timeEnd);
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
+            case "clearForm":
+                mealController.clearFilterForm();
+
             case "all":
             default:
                 log.info("getAll");
-                request.setAttribute("filterDateStart", FilterDateAndTimeValuesStorage.getDateStart());
+                /*request.setAttribute("filterDateStart", FilterDateAndTimeValuesStorage.getDateStart());
                 request.setAttribute("filterDateEnd", FilterDateAndTimeValuesStorage.getDateEnd());
                 request.setAttribute("filterTimeStart", FilterDateAndTimeValuesStorage.getTimeStart());
-                request.setAttribute("filterTimeEnd", FilterDateAndTimeValuesStorage.getTimeEnd());
+                request.setAttribute("filterTimeEnd", FilterDateAndTimeValuesStorage.getTimeEnd());*/
                 request.setAttribute("meals", mealController.getAll());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;

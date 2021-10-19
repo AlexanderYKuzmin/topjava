@@ -38,6 +38,7 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+
     <form method="get" action="meals">
         <input type="hidden" name="action" value="filter">
         <dl>
@@ -53,9 +54,16 @@
             <dd><input type="time" value="${filterTimeEnd}" name="timeEnd" required></dd>
         </dl>
         <button type="submit">Filter</button>
-        <button type="reset">Reset</button>
+        <button type="reset">Cancel</button>
+
     </form>
-    <div style="display: inline">
+    <form method="get" action="meals" id="clear-form">
+        <input type="hidden" name="action" value="clearForm" form="clear-form">
+        <button type="submit" form="clear-form">Clear filter form</button>
+    </form>
+
+
+    <div>
         <a href="meals?action=create">Add Meal</a>
     </div>
     <br><br>

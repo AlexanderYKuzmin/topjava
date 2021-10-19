@@ -3,6 +3,8 @@ package ru.javawebinar.topjava.service;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -38,7 +40,10 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
-    public List<Meal> getAllByDateAndTime(Predicate<Meal> dateAndTimePredicate){
+   /* public List<Meal> getAllByDateAndTime(Predicate<Meal> dateAndTimePredicate){
         return repository.getAllByDateAndTime(dateAndTimePredicate);
+    }*/
+    public List<Meal> getAllByDate(int userId, LocalDate dateStart, LocalDate dateEnd) {
+        return repository.getAllByDate(userId, dateStart, dateEnd);
     }
 }
