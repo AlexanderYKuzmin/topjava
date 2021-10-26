@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -12,8 +10,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -47,13 +43,12 @@ public class MealServiceTest {
         Meal newMeal = getNew();
         newMeal.setId(newId);
         assertMatch(created, newMeal);
-        assertMatch(service.get(newId, USER_ID), newMeal);
     }
 
     @Test
     public void get() {
         Meal meal = service.get(MEAL_ID, ADMIN_ID);
-        assertMatch(testMeal, meal);
+        assertMatch(meal, testMeal);
     }
 
     @Test
@@ -83,7 +78,7 @@ public class MealServiceTest {
     public void update() {
         Meal updated = getUpdated();
         service.update(updated, ADMIN_ID);
-        assertMatch(service.get(updated.getId(), ADMIN_ID), updated);
+        assertMatch(service.get(updated.getId(), ADMIN_ID), getUpdated());
     }
 
     @Test
@@ -96,7 +91,7 @@ public class MealServiceTest {
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
                 service.create(
-                        new Meal(LocalDateTime.of(2021, Month.JANUARY, 31, 9,0), "Test Launch", 3000)
+                        new Meal(testMeal.getDateTime(), "New test breakfast", 3000)
                 , ADMIN_ID));
     }
 }
