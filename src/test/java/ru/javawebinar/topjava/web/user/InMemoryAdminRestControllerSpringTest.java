@@ -20,11 +20,11 @@ public class InMemoryAdminRestControllerSpringTest {
     @Autowired
     private AdminRestController controller;
 
-    @Autowired
-    private InMemoryUserRepository repository;
+    private InMemoryUserRepository repository = new InMemoryUserRepository();
 
     @Before
     public void setUp() {
+
         repository.init();
     }
 
