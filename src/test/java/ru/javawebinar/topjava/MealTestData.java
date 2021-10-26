@@ -44,6 +44,17 @@ public class MealTestData {
         );
     }
 
+    public static List<Meal> getFullMealTestList() {
+       return Arrays.asList(
+               new Meal(100_002, LocalDateTime.of(2021, Month.JANUARY, 30, 10, 00), "Завтрак", 500),
+               new Meal(100_003, LocalDateTime.of(2021, Month.JANUARY, 30, 13, 00), "Обед", 1000),
+               new Meal(100_004, LocalDateTime.of(2021, Month.JANUARY, 30, 18, 00), "Ужин", 400),
+               new Meal(100_008, LocalDateTime.of(2021, Month.JANUARY, 31, 9, 00), "Завтрак", 300),
+               new Meal(100_009, LocalDateTime.of(2021, Month.JANUARY, 31, 14, 00), "Обед", 1500),
+               new Meal(100_010, LocalDateTime.of(2021, Month.JANUARY, 31, 19, 00), "Ужин", 400)
+       );
+    }
+
     public static void assertMatch(Meal actual, Meal expected) {
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
