@@ -1,19 +1,40 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@NamedQueries({
+        @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id AND m.id = :id"),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id = :user_id"),
+        @NamedQuery(name = Meal.BY_DATE_RANGE, query = "SELECT m FROM Meal m WHERE m.user.id = :user_id " +
+                "AND m.dateTime>=:start_date_time " +
+                "AND m.dateTime<:end_date_time " +
+                "ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT meal FROM Meal meal WHERE meal.user.id = :user_id " +
+                "ORDER BY meal.dateTime DESC")
+})
+@Entity
+@Table(name = "meals")
 public class Meal extends AbstractBaseEntity {
+
+    public static final String GET = "Meal.get";
+    public static final String DELETE = "Meal.delete";
+    public static final String BY_DATE_RANGE = "Meal.getByDateRange";
+    public static final String ALL_SORTED = "Meal.getAllSorted";
+
+    @Column(name = "date_time")
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "calories", nullable = false)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "user_id")
     private User user;
 
     public Meal() {
