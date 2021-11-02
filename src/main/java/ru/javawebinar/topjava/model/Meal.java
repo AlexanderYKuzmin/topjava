@@ -1,6 +1,11 @@
 package ru.javawebinar.topjava.model;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -16,7 +21,8 @@ import java.time.LocalTime;
                 "ORDER BY meal.dateTime DESC")
 })
 @Entity
-@Table(name = "meals")
+@Table(name = "meals",
+        uniqueConstraints = {@UniqueConstraint( columnNames = {"user_id", "date_time"}, name = "unique_user_date_time")})
 public class Meal extends AbstractBaseEntity {
 
     public static final String GET = "Meal.get";
@@ -24,17 +30,19 @@ public class Meal extends AbstractBaseEntity {
     public static final String BY_DATE_RANGE = "Meal.getByDateRange";
     public static final String ALL_SORTED = "Meal.getAllSorted";
 
-    @Column(name = "date_time")
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 125)
+    @NotBlank
     private String description;
 
     @Column(name = "calories", nullable = false)
+    @Range(max = 10_000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {

@@ -14,12 +14,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -34,6 +36,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+    private static final List<String> allTestTimeList = new ArrayList<>();
 
     @Autowired
     private MealService service;
@@ -42,8 +45,7 @@ public class MealServiceTest {
     public static Stopwatch stopwatchTestClass = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            super.finished(nanos, description);
-            log.info(description.getClassName() + " duration: " + nanos/1_000_000 + " ms");
+            allTestTimeList.forEach(log::info);
         }
     };
 
@@ -51,8 +53,10 @@ public class MealServiceTest {
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            super.finished(nanos, description);
-            log.info(description.getMethodName() + " duration: " + nanos/1_000_000 + " ms");
+            long millis = TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS);
+            String msg = description.getMethodName() + " duration: " + millis + " ms";
+            allTestTimeList.add(msg);
+            log.info(msg);
         }
     };
 
@@ -78,7 +82,6 @@ public class MealServiceTest {
         int newId = created.id();
         Meal newMeal = getNew();
         newMeal.setId(newId);
-        //newMeal.setUser(UserTestData.user);
         MEAL_MATCHER.assertMatch(created, newMeal);
         MEAL_MATCHER.assertMatch(service.get(newId, USER_ID), newMeal);
     }
@@ -88,7 +91,6 @@ public class MealServiceTest {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
     }
-
 
     @Test
     public void get() {
@@ -115,7 +117,6 @@ public class MealServiceTest {
 
     @Test
     public void updateNotOwn() {
-        meal1.setUser(UserTestData.user);
         assertThrows(NotFoundException.class, () -> service.update(meal1, ADMIN_ID));
         MEAL_MATCHER.assertMatch(service.get(MEAL1_ID, USER_ID), meal1);
     }
