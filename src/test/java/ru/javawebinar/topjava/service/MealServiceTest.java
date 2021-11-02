@@ -1,6 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.ClassRule;
+import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Stopwatch;
@@ -19,8 +19,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
@@ -36,18 +36,15 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
-    private static final List<String> allTestsTimeList = new ArrayList<>();
+    private static final Map<String, Long> allTestsTimeList = new HashMap<>();
 
     @Autowired
     private MealService service;
 
-    @ClassRule
-    public static Stopwatch stopwatchTestClass = new Stopwatch() {
-        @Override
-        protected void finished(long nanos, Description description) {
-            allTestsTimeList.forEach(log::info);
-        }
-    };
+    @AfterClass
+    public static void after() {
+        log.info("\n----All tests duration:----\n" + getLogText());
+    }
 
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
@@ -55,7 +52,7 @@ public class MealServiceTest {
         protected void finished(long nanos, Description description) {
             long millis = TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS);
             String msg = description.getMethodName() + " duration: " + millis + " ms";
-            allTestsTimeList.add(msg);
+            allTestsTimeList.put(description.getMethodName() + ":", millis);
             log.info(msg);
         }
     };
@@ -137,5 +134,11 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
+    }
+
+    private static String getLogText() {
+        StringBuilder sb = new StringBuilder();
+        allTestsTimeList.forEach((k,v) -> sb.append(String.format("%-30s %5d ms\n", k, v)));
+        return sb.toString();
     }
 }
