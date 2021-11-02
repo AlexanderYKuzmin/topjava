@@ -36,7 +36,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
-    private static final List<String> allTestTimeList = new ArrayList<>();
+    private static final List<String> allTestsTimeList = new ArrayList<>();
 
     @Autowired
     private MealService service;
@@ -45,7 +45,7 @@ public class MealServiceTest {
     public static Stopwatch stopwatchTestClass = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            allTestTimeList.forEach(log::info);
+            allTestsTimeList.forEach(log::info);
         }
     };
 
@@ -55,7 +55,7 @@ public class MealServiceTest {
         protected void finished(long nanos, Description description) {
             long millis = TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS);
             String msg = description.getMethodName() + " duration: " + millis + " ms";
-            allTestTimeList.add(msg);
+            allTestsTimeList.add(msg);
             log.info(msg);
         }
     };
