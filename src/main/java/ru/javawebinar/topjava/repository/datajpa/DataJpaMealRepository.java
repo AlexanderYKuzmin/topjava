@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -9,12 +8,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Profile("datajpa")
 public class DataJpaMealRepository implements MealRepository {
 
     private final CrudMealRepository crudRepository;
 
-    public DataJpaMealRepository(CrudMealRepository crudRepository) {
+    private final CrudUserRepository userRepository;
+
+    public DataJpaMealRepository(CrudMealRepository crudRepository, CrudUserRepository crudUserRepository) {
+        this.userRepository = crudUserRepository;
         this.crudRepository = crudRepository;
     }
 
@@ -22,6 +23,7 @@ public class DataJpaMealRepository implements MealRepository {
     public Meal save(Meal meal, int userId) {
         Meal repoMeal;
         if(meal.isNew()) {
+            meal.setUser(userRepository.getById(userId));
             return crudRepository.save(meal);
         } else if((repoMeal = get(meal.getId(), userId)) != null) {
             repoMeal.setDateTime(meal.getDateTime());
@@ -39,7 +41,7 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        Meal meal = crudRepository.findById(id).get();
+        Meal meal = crudRepository.findById(id).orElse(null);
         return meal != null && meal.getUser().getId() == userId ? meal : null ;
     }
 

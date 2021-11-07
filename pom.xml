@@ -226,12 +226,12 @@
             </activation>
         </profile>
 
-        <profile>
+        <!--<profile>
             <id>datajpa</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-        </profile>
+        </profile>-->
     </profiles>
 
     <dependencyManagement>
