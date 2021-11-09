@@ -1,15 +1,18 @@
 package ru.javawebinar.topjava;
 
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class UserTestData {
-    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator("registered", "roles");
+    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator("registered", "roles", "meals");
 
     public static final int USER_ID = START_SEQ;
     public static final int ADMIN_ID = START_SEQ + 1;
@@ -31,5 +34,14 @@ public class UserTestData {
         updated.setEnabled(false);
         updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
+    }
+
+    public static User getWithMealData() {
+        User userWithMealData = new User(user);
+        List<Meal> mealListForUser = MealTestData.meals;
+        mealListForUser.forEach(meal -> meal.setUser(user));
+        userWithMealData.setMeals(MealTestData.meals.stream()
+                .sorted((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime())).toList());
+        return userWithMealData;
     }
 }

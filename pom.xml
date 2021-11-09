@@ -225,13 +225,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
-
-        <!--<profile>
-            <id>datajpa</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>-->
     </profiles>
 
     <dependencyManagement>
