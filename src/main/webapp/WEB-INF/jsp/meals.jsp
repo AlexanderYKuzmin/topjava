@@ -5,15 +5,15 @@
 <html>
 <head>
     <title>Meals</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 </head>
 <body>
 <section>
-    <h3><a href="index.jsp">Home</a></h3>
+    <h3><a href="/topjava">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
-    <form method="get" action="meals">
-        <input type="hidden" name="action" value="filter">
+    <form method="get" action="${pageContext.request.contextPath}/meals/filter">
+        <%--<input type="hidden" name="action" value="filter">--%>
         <dl>
             <dt>From Date (inclusive):</dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -55,8 +55,11 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
-                <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
+                <td><a href="${pageContext.request.contextPath}/meals/update/${meal.id}">Update</a></td>
+                <td><a href="${pageContext.request.contextPath}/meals/delete/${meal.id}">Delete</a></td>
+                <%--<form:form method="delete" >
+                    <p class="submit"><input type="submit" value="Delete"/></p>
+                </form:form>--%>
             </tr>
         </c:forEach>
     </table>
