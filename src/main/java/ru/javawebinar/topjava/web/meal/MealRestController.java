@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.AbstractMealController;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
@@ -18,16 +19,16 @@ import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 @Controller
-public class MealRestController {
+public class MealRestController extends AbstractMealController {
     private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
 
-    private final MealService service;
+    //private final MealService service;
 
-    public MealRestController(MealService service) {
+    /*public MealRestController(MealService service) {
         this.service = service;
-    }
+    }*/
 
-    public Meal get(int id) {
+    /*public Meal get(int id) {
         int userId = SecurityUtil.authUserId();
         log.info("get meal {} for user {}", id, userId);
         return service.get(id, userId);
@@ -59,12 +60,12 @@ public class MealRestController {
         service.update(meal, userId);
     }
 
-    /**
+    *//**
      * <ol>Filter separately
      * <li>by date</li>
      * <li>by time for every date</li>
      * </ol>
-     */
+     *//*
     public List<MealTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
                                    @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
         int userId = SecurityUtil.authUserId();
@@ -72,5 +73,35 @@ public class MealRestController {
 
         List<Meal> mealsDateFiltered = service.getBetweenInclusive(startDate, endDate, userId);
         return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
+    }*/
+
+    @Override
+    public List<MealTo> getAll() {
+        return super.getAll();
+    }
+
+    @Override
+    public void delete(int id) {
+        super.delete(id);
+    }
+
+    @Override
+    public Meal get(int id) {
+        return super.get(id);
+    }
+
+    @Override
+    public Meal create(Meal meal) {
+        return super.create(meal);
+    }
+
+    @Override
+    public void update(Meal meal, int id) {
+        super.update(meal, id);
+    }
+
+    @Override
+    public List<MealTo> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }

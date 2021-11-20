@@ -4,7 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.ActiveProfiles;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
@@ -27,14 +30,14 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
-    @Autowired
-    protected JpaUtil jpaUtil;
+    /*@Autowired
+    protected JpaUtil jpaUtil;*/
 
-    @Before
+   /* @Before
     public void setup() {
         cacheManager.getCache("users").clear();
         jpaUtil.clear2ndLevelHibernateCache();
-    }
+    }*/
 
     @Test
     public void create() {
@@ -100,5 +103,11 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 9, true, new Date(), Set.of())));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())));
+    }
+
+    @Test
+    public void getWithRoles() {
+        User admin = service.get(ADMIN_ID);
+        USER_MATCHER.assertMatch(admin, UserTestData.admin);
     }
 }

@@ -20,17 +20,17 @@
 
     <!-- Choose profile from (hsqldb/ postgres) and (jdbc/ datajpa/ jpa) -->
 
-    <beans profile="hsqldb">
+    <!--<beans profile="hsqldb">
         <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
 
-        <!--no pooling-->
+        &lt;!&ndash;no pooling&ndash;&gt;
         <bean id="dataSource"
               class="org.springframework.jdbc.datasource.DriverManagerDataSource"
               p:driverClassName="org.hsqldb.jdbcDriver"
               p:url="${database.url}"
               p:username="${database.username}"
               p:password="${database.password}"/>
-    </beans>
+    </beans>-->
 
     <beans profile="postgres">
         <!--
@@ -67,8 +67,11 @@
             <constructor-arg ref="jdbcTemplate"/>
         </bean>
 
-        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"/>
-        <tx:annotation-driven transaction-manager="transactionManager"/>
+        <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <constructor-arg ref="dataSource"/>
+        </bean>
+
+        <tx:annotation-driven transaction-manager="txManager"/>
     </beans>
 
     <beans profile="jpa,datajpa">
