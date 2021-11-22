@@ -11,10 +11,7 @@
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <%--<h3><a href="index.html">Home</a></h3>--%>
     <hr>
-    <%--<h2>${param.action == 'create' ? 'Create meal' : 'Edit meal'}</h2>--%>
-
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
     <h2><spring:message code="${meal.id != null ? 'mealform.title.update' : 'mealform.title.create'}" /></h2>
     <form method="post" action="${pageContext.request.contextPath}/meals/save" accept-charset="windows-1250">

@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
-import ru.javawebinar.topjava.model.AbstractNamedEntity;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

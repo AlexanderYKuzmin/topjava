@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
-import ru.javawebinar.topjava.model.AbstractNamedEntity;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
@@ -53,25 +52,23 @@ public class JdbcUserRepository implements UserRepository {
         if (validationResult.size() != 0) throw new ConstraintViolationException(validationResult);
 
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        System.out.println("************" + user.getRoles());
+
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
-
         } else if (namedParameterJdbcTemplate.update("""
                    UPDATE users SET name=:name, email=:email, password=:password, 
                    registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id
-                """, parameterSource) == 0) {
-            return null;
-        }
+                """, parameterSource) != 0) {
+            jdbcTemplate.update("DELETE FROM user_roles WHERE user_id = ?", user.id());
+        } else return null;
 
-        jdbcTemplate.update("DELETE FROM user_roles WHERE user_id = ?", user.id());
         List<Object[]> args = new ArrayList<>();
-        for(Role role : user.getRoles()) {
+        for (Role role : user.getRoles()) {
             args.add(new Object[]{user.id(), role});
         }
-        jdbcTemplate.batchUpdate("INSERT INTO user_roles(user_id, role) VALUES (?, ?)", args, new int[] {Types.DECIMAL, Types.VARCHAR});
-        System.out.println("**** repository ****" + user.getRoles());
+        jdbcTemplate.batchUpdate("INSERT INTO user_roles(user_id, role) VALUES (?, ?)",
+                args, new int[]{Types.DECIMAL, Types.VARCHAR});
         return user;
     }
 

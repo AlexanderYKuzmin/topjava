@@ -11,11 +11,9 @@
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <%--<h3><a href="/topjava">Home</a></h3>--%>
     <hr/>
     <h2><spring:message code="meal.title"/></h2>
     <form method="get" action="${pageContext.request.contextPath}/meals/filter">
-        <%--<input type="hidden" name="action" value="filter">--%>
         <dl>
             <dt><spring:message code="meal.date.from"/>:</dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
