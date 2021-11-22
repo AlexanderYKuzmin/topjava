@@ -71,6 +71,8 @@
             <constructor-arg ref="dataSource"/>
         </bean>
 
+        <bean id="jdbcValidator" class="ru.javawebinar.topjava.repository.jdbc.JdbcHibernateValidator"/>
+
         <tx:annotation-driven transaction-manager="txManager"/>
     </beans>
 

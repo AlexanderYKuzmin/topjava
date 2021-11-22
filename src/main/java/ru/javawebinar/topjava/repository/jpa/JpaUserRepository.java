@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -59,9 +60,17 @@ public class JpaUserRepository implements UserRepository {
 
     @Override
     public User getByEmail(String email) {
+        List<User> testUsers = em.createNamedQuery(User.ALL_SORTED, User.class).getResultList();
+        System.out.println("**TEST USERS**" + testUsers);
+
+        Query query = em.createQuery("SELECT u FROM User u WHERE u.email=?1");
+        query.setParameter(1, email);
+        System.out.println("*****" + query.getResultList() + "************");
+
         List<User> users = em.createNamedQuery(User.BY_EMAIL, User.class)
                 .setParameter(1, email)
                 .getResultList();
+        System.out.println(users);
         return DataAccessUtils.singleResult(users);
     }
 

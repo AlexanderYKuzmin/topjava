@@ -23,6 +23,7 @@ public class UserService {
 
     @CacheEvict(value = "users", allEntries = true)
     public User create(User user) {
+        System.out.println(user.getRoles());
         Assert.notNull(user, "user must not be null");
         return repository.save(user);
     }
