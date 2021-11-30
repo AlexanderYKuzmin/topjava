@@ -1,20 +1,26 @@
 package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealTo;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 
 import static java.time.LocalDateTime.of;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
     public static final MatcherFactory.Matcher<Meal> MEAL_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Meal.class, "user");
+    public static final MatcherFactory.Matcher<MealTo> MEALTO_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(MealTo.class);
 
     public static final int NOT_FOUND = 10;
     public static final int MEAL1_ID = START_SEQ + 2;
     public static final int ADMIN_MEAL_ID = START_SEQ + 9;
+    public static final int CREATED_MEAL_ID = START_SEQ + 11;
 
     public static final Meal meal1 = new Meal(MEAL1_ID, of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500);
     public static final Meal meal2 = new Meal(MEAL1_ID + 1, of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
@@ -28,11 +34,24 @@ public class MealTestData {
 
     public static final List<Meal> meals = List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1);
 
+    public static final List<Meal> filteredMeals = List.of(meal2, meal1);
+
+    public static final Map<String, String> filterMealData = Map.of("startDate", "2020-01-30", "startTime",
+            "10:00", "endDate", "2020-01-30", "endTime", "20:00");
+
+    public static final List<Meal> afterDeleteMeals = List.of(meal7, meal6, meal5, meal4, meal3, meal2);
+
     public static Meal getNew() {
         return new Meal(null, of(2020, Month.FEBRUARY, 1, 18, 0), "Созданный ужин", 300);
     }
 
     public static Meal getUpdated() {
         return new Meal(MEAL1_ID, meal1.getDateTime().plus(2, ChronoUnit.MINUTES), "Обновленный завтрак", 200);
+    }
+
+    public static Meal getCreated() {
+        Meal meal = getNew();
+        meal.setId(CREATED_MEAL_ID);
+        return meal;
     }
 }
