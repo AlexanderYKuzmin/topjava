@@ -15,6 +15,8 @@
 
     <context:component-scan base-package="ru.javawebinar.**.web"/>
 
+    <!--<bean class="ru.javawebinar.topjava.util.DateTimeFormatConfiguration" id="dateTimeFormatConfiguration"/>-->
+
     <!--<import resource="spring-db.xml"/>-->
 
 </beans>

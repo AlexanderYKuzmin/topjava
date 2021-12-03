@@ -36,8 +36,8 @@ public class MealTestData {
 
     public static final List<Meal> filteredMeals = List.of(meal2, meal1);
 
-    public static final Map<String, String> filterMealData = Map.of("startDate", "2020-01-30", "startTime",
-            "10:00", "endDate", "2020-01-30", "endTime", "20:00");
+    public static final Map<String, String> filterMealData =
+            Map.of("startDate", "2020-01-30", "startTime","10:00", "endDate", "2020-01-30", "endTime", "20:00");
 
     public static final List<Meal> afterDeleteMeals = List.of(meal7, meal6, meal5, meal4, meal3, meal2);
 
