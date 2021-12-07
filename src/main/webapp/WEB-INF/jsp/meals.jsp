@@ -20,11 +20,11 @@
                         <div class="row">
                             <div class="col-2">
                                 <label for="startDate"><spring:message code="meal.startDate"/></label>
-                                <input class="form-control" id="startDate" name="startDate">
+                                <input type="date" class="form-control" id="startDate" name="startDate">
                             </div>
                             <div class="col-2">
                                 <label for="endDate"><spring:message code="meal.endDate"/></label>
-                                <input class="form-control" id="endDate" name="endDate">
+                                <input type="date" class="form-control" id="endDate" name="endDate">
                             </div>
                             <div class="offset-2 col-3">
                                 <label for="startTime"><spring:message code="meal.startTime"/></label>
@@ -47,29 +47,7 @@
                 </div>
             </div>
             <br>
-            <%--<form method="get" action="meals/filter">
-                <dl>
-                    <dt><spring:message code="meal.startDate"/>:</dt>
-                    <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
-                </dl>
-                <dl>
-                    <dt><spring:message code="meal.endDate"/>:</dt>
-                    <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
-                </dl>
-                <dl>
-                    <dt><spring:message code="meal.startTime"/>:</dt>
-                    <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
-                </dl>
-                <dl>
-                    <dt><spring:message code="meal.endTime"/>:</dt>
-                    <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
-                </dl>
-                <button type="submit"><spring:message code="meal.filter"/></button>
-            </form>--%>
 
-           <%-- <hr>
-            <a href="meals/create"><spring:message code="meal.add"/></a>
-            <hr>--%>
             <button class="btn btn-primary" onclick="add()">
                 <span class="fa fa-plus"></span>
                 <spring:message code="common.add"/>
@@ -96,8 +74,6 @@
                         </td>
                         <td>${meal.description}</td>
                         <td>${meal.calories}</td>
-                        <%--<td><a href="meals/update?id=${meal.id}"><spring:message code="common.update"/></a></td>
-                        <td><a href="meals/delete?id=${meal.id}"><spring:message code="common.delete"/></a></td>--%>
                         <td><a><span class="fa fa-pencil"></span></a></td>
                         <td><a class="delete"><span class="fa fa-remove"></span></a></td>
                     </tr>
@@ -122,7 +98,8 @@
                                    placeholder="<spring:message code="meal.dateTime"/>">
                         </div>
                         <div class="form-group">
-                            <label for="description" class="col-form-label"><spring:message code="meal.description"/></label>
+                            <label for="description" class="col-form-label"><spring:message
+                                    code="meal.description"/></label>
                             <input type="text" class="form-control" id="description" name="description"
                                    placeholder="<spring:message code="meal.description"/>">
                         </div>

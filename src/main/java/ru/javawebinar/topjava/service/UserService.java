@@ -56,7 +56,7 @@ public class UserService {
         return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
 
-    public void setEnabled(boolean enabled, int id) {
+    public void enable(boolean enabled, int id) {
         repository.updateEnabled(enabled, id);
     }
 }

@@ -8,7 +8,6 @@ const ctx = {
 function enable(chkbox, id) {
     var enabled = chkbox.is(":checked");
     console.log(enabled);
-//  https://stackoverflow.com/a/22213543/548473
     $.ajax({
         url: userAjaxUrl + id,
         type: "POST",
@@ -20,7 +19,6 @@ function enable(chkbox, id) {
         $(chkbox).prop("checked", !enabled);
     });
 }
-
 
 // $(document).ready(function () {
 $(function () {
@@ -66,9 +64,6 @@ $(function () {
                 ]
             ],
             "createdRow": function (row, data, dataIndex) {
-                console.log("data " + data);
-                console.log("data enabled " + data.enabled);
-                console.log("tr data-user-enabled " + $(this).closest("tr").attr("data-user-enabled"));
                 if (!$(data.enabled).is(":checked")) {
                     $(row).attr("data-user-enabled", false);
                 }
