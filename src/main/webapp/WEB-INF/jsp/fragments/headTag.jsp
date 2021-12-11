@@ -4,6 +4,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <title><spring:message code="app.title"/></title>
     <base href="${pageContext.request.contextPath}/"/>
 
@@ -22,4 +23,5 @@
     <script src="webjars/datatables/1.11.3/js/dataTables.bootstrap4.min.js" defer></script>
     <script src="webjars/datetimepicker/2.5.20-1/jquery.datetimepicker.js" defer></script>
     <script src="webjars/noty/3.1.4/lib/noty.min.js" defer></script>
+
 </head>

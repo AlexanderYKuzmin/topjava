@@ -40,8 +40,10 @@ $(function () {
                     "data": "enabled",
                     "render": function (data, type, row) {
                         if (type === 'display') {
+                            console.log("data after if"  + data);
                             return "<input type='checkbox' " + ($(row.enabled).is(":checked") ? "checked" : "") + " onclick='enable($(this)," + row.DT_RowId + ");'/>";
                         }
+                        console.log("data before return" + data);
                         return data;
                     }
                 },
@@ -62,12 +64,14 @@ $(function () {
                     0,
                     "asc"
                 ]
-            ],
-            "createdRow": function (row, data, dataIndex) {
-                if (!$(data.enabled).is(":checked")) {
+            ]
+            /*"createdRow": function (row, data, dataIndex) {
+                console.log("data enabled" + data.enabled);
+                console.log("row enabled" + row.enabled);
+                if (!data.enabled) {
                     $(row).attr("data-user-enabled", false);
                 }
-            }
+            }*/
         })
     );
 });
