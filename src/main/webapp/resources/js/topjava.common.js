@@ -23,6 +23,7 @@ function updateRow(id) {
     $("#modalTitle").html(i18n["editTitle"]);
     $.get(ctx.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
+            if(key == "dateTime") { value = onShowDateTime(value) }
             form.find("input[name='" + key + "']").val(value);
         });
         $('#editRow').modal();
@@ -46,10 +47,12 @@ function updateTableByData(data) {
 }
 
 function save() {
+    mealFormDetailsDateTimeToLocalDateTime();
+
     $.ajax({
         type: "POST",
         url: ctx.ajaxUrl,
-        data: form.serialize()
+        data: form.serialize(),
     }).done(function () {
         $("#editRow").modal("hide");
         ctx.updateTable();
@@ -96,4 +99,11 @@ function failNoty(jqXHR) {
         layout: "bottomRight"
     });
     failedNote.show()
+}
+
+function mealFormDetailsDateTimeToLocalDateTime() {
+    let dt = form.find("input[name='dateTime']").val();
+    if(dt != null) {
+        form.find("input[name='dateTime']").val(dt.replace(' ', 'T'));
+    }
 }
